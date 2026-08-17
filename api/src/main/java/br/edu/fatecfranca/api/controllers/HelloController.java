@@ -11,4 +11,9 @@ public class HelloController {
         return "API em funcionamento!";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return "Isto é um teste.";
+    }
+
 }
