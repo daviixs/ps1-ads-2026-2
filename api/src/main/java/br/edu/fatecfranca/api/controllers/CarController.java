@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package br.edu.fatecfranca.api.controllers;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entities.Car;
-import com.example.demo.repositories.CarRepository;
+import br.edu.fatecfranca.api.entities.Car;
+import br.edu.fatecfranca.api.repositories.CarRepository;
 
 @RestController
 @RequestMapping("/cars")

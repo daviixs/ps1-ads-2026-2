@@ -1,4 +1,4 @@
-package com.example.demo.entities;
+package br.edu.fatecfranca.api.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

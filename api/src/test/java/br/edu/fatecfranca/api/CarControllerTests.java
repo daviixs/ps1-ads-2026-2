@@ -1,4 +1,4 @@
-package com.example.demo;
+package br.edu.fatecfranca.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,9 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.demo.controllers.CarController;
-import com.example.demo.entities.Car;
-import com.example.demo.repositories.CarRepository;
+import br.edu.fatecfranca.api.controllers.CarController;
+import br.edu.fatecfranca.api.entities.Car;
+import br.edu.fatecfranca.api.repositories.CarRepository;
 
 import java.util.List;
 import java.util.Optional;
