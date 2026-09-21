@@ -14,48 +14,48 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.fatecfranca.api.entities.Car;
-import br.edu.fatecfranca.api.repositories.CarRepository;
+import br.edu.fatecfranca.api.services.CarService;
 
 @RestController
 @RequestMapping("/cars")
 public class CarController {
 
-    private final CarRepository repository;
+    private final CarService service;
 
-    public CarController(CarRepository repository) {
-        this.repository = repository;
+    public CarController(CarService service) {
+        this.service = service;
     }
 
     @PostMapping
     public ResponseEntity<Car> create(@RequestBody Car car) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(car));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(car));
     }
 
     @GetMapping
     public List<Car> findAll() {
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Car> findById(@PathVariable Long id) {
-        return repository.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return service.findById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> update(@PathVariable Long id, @RequestBody Car car) {
-        if (!repository.existsById(id)) {
+        if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         car.setId(id);
-        return ResponseEntity.ok(repository.save(car));
+        return ResponseEntity.ok(service.update(car));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!repository.existsById(id)) {
+        if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-        repository.deleteById(id);
+        service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

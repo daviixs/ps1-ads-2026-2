@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import br.edu.fatecfranca.api.controllers.CarController;
 import br.edu.fatecfranca.api.entities.Car;
-import br.edu.fatecfranca.api.repositories.CarRepository;
+import br.edu.fatecfranca.api.services.CarService;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,18 +34,18 @@ class CarControllerTests {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private CarRepository repository;
+    private CarService service;
 
     @Test
     void createsAndListsCars() throws Exception {
         Car saved = car(1L, "Toyota", "ABC1D23");
-        given(repository.save(any(Car.class))).willReturn(saved);
-        given(repository.findAll()).willReturn(List.of(saved));
+        given(service.create(any(Car.class))).willReturn(saved);
+        given(service.findAll()).willReturn(List.of(saved));
 
         String payload = """
                 {"brand":"Toyota","model":"Corolla XEi","color":"Prata","yearManufacture":2022,
                  "imported":false,"plates":"ABC1D23","sellingDate":"2026-09-10",
-                 "sellingPrice":128500.00,"customerId":1}
+                 "sellingPrice":128500.00,"customer":{"id":1}}
                 """;
 
         mockMvc.perform(post("/cars").contentType(MediaType.APPLICATION_JSON).content(payload))
@@ -62,9 +62,9 @@ class CarControllerTests {
     void findsUpdatesAndDeletesExistingCar() throws Exception {
         Car existing = car(1L, "Toyota", "ABC1D23");
         Car updated = car(1L, "Toyota", "XYZ9Z99");
-        given(repository.findById(1L)).willReturn(Optional.of(existing));
-        given(repository.existsById(1L)).willReturn(true);
-        given(repository.save(any(Car.class))).willReturn(updated);
+        given(service.findById(1L)).willReturn(Optional.of(existing));
+        given(service.existsById(1L)).willReturn(true);
+        given(service.update(any(Car.class))).willReturn(updated);
 
         mockMvc.perform(get("/cars/1"))
                 .andExpect(status().isOk())
@@ -83,8 +83,8 @@ class CarControllerTests {
 
     @Test
     void returnsNotFoundForUnknownCar() throws Exception {
-        given(repository.findById(99L)).willReturn(Optional.empty());
-        given(repository.existsById(eq(99L))).willReturn(false);
+        given(service.findById(99L)).willReturn(Optional.empty());
+        given(service.existsById(eq(99L))).willReturn(false);
 
         mockMvc.perform(get("/cars/99")).andExpect(status().isNotFound());
         mockMvc.perform(put("/cars/99").contentType(MediaType.APPLICATION_JSON).content("{}"))
