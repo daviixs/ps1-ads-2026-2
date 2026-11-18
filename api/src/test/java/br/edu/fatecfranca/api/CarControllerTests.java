@@ -16,6 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import br.edu.fatecfranca.api.controllers.CarController;
+import br.edu.fatecfranca.api.dtos.CarRequest;
 import br.edu.fatecfranca.api.entities.Car;
 import br.edu.fatecfranca.api.services.CarService;
 
@@ -39,13 +40,13 @@ class CarControllerTests {
     @Test
     void createsAndListsCars() throws Exception {
         Car saved = car(1L, "Toyota", "ABC1D23");
-        given(service.create(any(Car.class))).willReturn(saved);
+        given(service.create(any(CarRequest.class))).willReturn(saved);
         given(service.findAll()).willReturn(List.of(saved));
 
         String payload = """
                 {"brand":"Toyota","model":"Corolla XEi","color":"Prata","yearManufacture":2022,
                  "imported":false,"plates":"ABC1D23","sellingDate":"2026-09-10",
-                 "sellingPrice":128500.00,"customer":{"id":1}}
+                 "sellingPrice":128500.00,"customerId":1}
                 """;
 
         mockMvc.perform(post("/cars").contentType(MediaType.APPLICATION_JSON).content(payload))
@@ -64,7 +65,7 @@ class CarControllerTests {
         Car updated = car(1L, "Toyota", "XYZ9Z99");
         given(service.findById(1L)).willReturn(Optional.of(existing));
         given(service.existsById(1L)).willReturn(true);
-        given(service.update(any(Car.class))).willReturn(updated);
+        given(service.update(eq(1L), any(CarRequest.class))).willReturn(updated);
 
         mockMvc.perform(get("/cars/1"))
                 .andExpect(status().isOk())
